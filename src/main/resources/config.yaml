@@ -1,0 +1,9 @@
+dataPath: C:\Temp\data\GA\olb\dateStr=2018-09-07\*.avro
+doIndex: true
+esNodes: 10.47.138.181
+esClustername: elasticseach-api-cluster1-dev
+esMappingId: indexId
+esIndexAutoCreate: true
+indexName: ga_day_index-0907-all
+mappingName: ga_index_type
+columnsToConvert: [geoNetwork.latitude&latitudeDouble&toDouble, geoNetwork.longitude&longitudeDouble&toDouble]
