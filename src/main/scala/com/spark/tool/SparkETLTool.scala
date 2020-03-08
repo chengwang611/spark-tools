@@ -24,6 +24,7 @@ import org.apache.spark.sql.functions.{ approx_count_distinct, expr, max, min, c
 import org.apache.spark.sql.functions.concat
 import org.apache.spark.sql.functions.to_json
 import java.net.URI
+import java.io.File
 import java.util.concurrent.{ ConcurrentHashMap, ConcurrentMap }
 import org.apache.hadoop.fs.{ FileSystem, Path, FileStatus, LocatedFileStatus, RemoteIterator }
 /**
@@ -51,14 +52,15 @@ object Aggregation {
       vars.put(arg.substring(0, pos), arg.substring(pos + 1))
     }
     // initialize spark context
+
     val conf = new SparkConf().setAppName("fxconduct etl tool")
     if (!conf.contains("spark.master")) conf.setMaster("local[*]")
     val spark = SparkSession.builder().config(conf).getOrCreate()
-    val path1 = vars.getOrDefault("path1", "C:\\Users\\chenwang2017\\git\\Spark-The-Definitive-Guide\\data\\retail-data\\all\\day1.csv")
-    val path2 = vars.getOrDefault("path2", "C:\\Users\\chenwang2017\\git\\Spark-The-Definitive-Guide\\data\\retail-data\\all\\day4.csv")
+    val path1 = vars.getOrDefault("path1", new File("src/main/resources/data/2019-07-28.csv").getAbsolutePath())
+    val path2 = vars.getOrDefault("path2", new File("src/main/resources/data/2019-07-29.csv").getAbsolutePath())
     val keyCols = vars.getOrDefault("keyCols", "InvoiceNo,StockCode")
     val flatColumn = vars.getOrDefault("flatColumn", "")
-    val outputPath = vars.getOrDefault("outputPath", "C:\\Users\\chenwang2017\\git\\Spark-The-Definitive-Guide\\data\\retail-data\\etl\\" + System.currentTimeMillis() + "\\")
+    val outputPath = vars.getOrDefault("outputPath", new File("output").getAbsolutePath()+"\\" + System.currentTimeMillis() + "\\")
     val keyColumns = keyCols.split(",").toSeq.map(col(_));
     val t0=System.currentTimeMillis()
     val oldDF = readfile(path1, spark)//.cache()
