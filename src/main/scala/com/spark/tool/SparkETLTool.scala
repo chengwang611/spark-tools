@@ -28,7 +28,7 @@ import java.io.File
 import java.util.concurrent.{ ConcurrentHashMap, ConcurrentMap }
 import org.apache.hadoop.fs.{ FileSystem, Path, FileStatus, LocatedFileStatus, RemoteIterator }
 /**
- * Usage: Aggregation [partitions] [numElem] [blockSize]
+ * Usage: Aggregation 
  */
 object Aggregation {
 
@@ -56,11 +56,11 @@ object Aggregation {
     val conf = new SparkConf().setAppName("fxconduct etl tool")
     if (!conf.contains("spark.master")) conf.setMaster("local[*]")
     val spark = SparkSession.builder().config(conf).getOrCreate()
-    val path1 = vars.getOrDefault("path1", new File("src/main/resources/data/2019-07-28.csv").getAbsolutePath())
-    val path2 = vars.getOrDefault("path2", new File("src/main/resources/data/2019-07-29.csv").getAbsolutePath())
+    val path1 = vars.getOrDefault("path1", new File("data/input/2019-07-28.csv").getAbsolutePath())
+    val path2 = vars.getOrDefault("path2", new File("data/input/2019-07-29.csv").getAbsolutePath())
     val keyCols = vars.getOrDefault("keyCols", "InvoiceNo,StockCode")
     val flatColumn = vars.getOrDefault("flatColumn", "")
-    val outputPath = vars.getOrDefault("outputPath", new File("output").getAbsolutePath()+"\\" + System.currentTimeMillis() + "\\")
+    val outputPath = vars.getOrDefault("outputPath", new File("data/output").getAbsolutePath()+"\\" + System.currentTimeMillis() + "\\")
     val keyColumns = keyCols.split(",").toSeq.map(col(_));
     val t0=System.currentTimeMillis()
     val oldDF = readfile(path1, spark)//.cache()
