@@ -28,7 +28,7 @@ import java.io.File
 import java.util.concurrent.{ ConcurrentHashMap, ConcurrentMap }
 import org.apache.hadoop.fs.{ FileSystem, Path, FileStatus, LocatedFileStatus, RemoteIterator }
 /**
- * Usage: Aggregation 
+ * Usage: Aggregation  path1=/tmp/fxconduct/2019-07-28.csv path2=/tmp/fxconduct/2019-07-28.csv keyCols=InvoiceNo,StockCode flatColumn=Description outputPath=/tmp/fxconduct/output/
  */
 object Aggregation {
 
