@@ -28,7 +28,7 @@ import java.io.File
 import java.util.concurrent.{ ConcurrentHashMap, ConcurrentMap }
 import org.apache.hadoop.fs.{ FileSystem, Path, FileStatus, LocatedFileStatus, RemoteIterator }
 /**
- * Usage: Aggregation  path1=/tmp/fxconduct/2019-07-28.csv path2=/tmp/fxconduct/2019-07-28.csv keyCols=InvoiceNo,StockCode flatColumn=Description outputPath=/tmp/fxconduct/output/
+ * Usage: Aggregation  path1=/tmp/fxconduct/2019-07-28.csv path2=/tmp/fxconduct/2019-07-28.csv keyCols=InvoiceNo,StockCode flatColumn=Description outputPath=/tmp/fxconduct/output/ outputFormat=csv
  */
 object Aggregation {
 
@@ -43,6 +43,13 @@ object Aggregation {
     }
     return null
 
+  }
+  
+  def writeFile(df:DataFrame,path:String,partition:Int)  {
+    if(path.endsWith("csv"))
+      df.repartition(partition).write.format("csv").mode("overwrite").option("header", "true").option("sep", ",").save(path)
+    else if(path.endsWith("parquet"))
+      df.repartition(partition).write.parquet(path)
   }
 
   def main(args: Array[String]) {
@@ -61,6 +68,7 @@ object Aggregation {
     val keyCols = vars.getOrDefault("keyCols", "InvoiceNo,StockCode")
     val flatColumn = vars.getOrDefault("flatColumn", "")
     val outputPath = vars.getOrDefault("outputPath", new File("data/output").getAbsolutePath()+"\\" + System.currentTimeMillis() + "\\")
+    val outputFormat=vars.getOrDefault("outputFormat", "parauet")
     val keyColumns = keyCols.split(",").toSeq.map(col(_));
     val t0=System.currentTimeMillis()
     val oldDF = readfile(path1, spark)//.cache()
@@ -95,19 +103,22 @@ object Aggregation {
       val deletedDF = oldDFwithUid.join(deletedUid, oldDFwithUid.col("uid") === deletedUid.col("uuid"))
       System.out.println("deleted:")
       deletedDF.show(false)
-      deletedDF.drop("uid").drop("uuid").repartition(1).write.parquet(outputPath + "deleted.parquet")
+      writeFile(deletedDF.drop("uid").drop("uuid"),outputPath + "deleted."+outputFormat,1)
+      //deletedDF.drop("uid").drop("uuid").repartition(1).write.parquet(outputPath + "deleted.parquet")
 
       //added records in raw
       val addedDF = newDFwithUid.join(addedUid, newDFwithUid.col("uid") === addedUid.col("uuid"))
       System.out.println("added:")
       addedDF.show(false)
-      addedDF.drop("uid").drop("uuid").repartition(1).write.parquet(outputPath + "added.parquet")
+      writeFile(deletedDF.drop("uid").drop("uuid"),outputPath + "added."+outputFormat,1)
+      //addedDF.drop("uid").drop("uuid").repartition(1).write.parquet(outputPath + "added.parquet")
       //updated records in the new file
 
       val updateNewDF = newDFwithUid.join(updateUid, newDFwithUid.col("uid") === updateUid.col("uuid"))
       System.out.println("update as :")
       updateNewDF.show(false)
-      updateNewDF.drop("uid").drop("uuid").repartition(1).write.parquet(outputPath + "updated_as.parquet")
+      writeFile(deletedDF.drop("uid").drop("uuid"),outputPath + "updated_as."+outputFormat,1)
+      //updateNewDF.drop("uid").drop("uuid").repartition(1).write.parquet(outputPath + "updated_as.parquet")
       //updated records in the old file
 
       val updateOldDF = oldDFwithUid.join(updateUid, oldDFwithUid.col("uid") === updateUid.col("uuid"))
