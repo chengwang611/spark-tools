@@ -7,7 +7,7 @@ ALIAS=$4
 OLD_INDEX=$5
 NEW_INDEX=$6
 
-echo "***** swapping  $ALIAS from  $OLD_INDEX to $NEW_INDEX *****"
+echo "*****swapp  $ALIAS from  $OLD_INDEX to $NEW_INDEX*****"
 
 if [ -z $ADDRESS ]; then
   ADDRESS="localhost:9200"
@@ -21,7 +21,7 @@ if [ $? != 0 ]; then
     exit -1
 fi
 
-HTTP_STATUS=$(curl   --user USERID:PASSWORD -XPOST 'http://192.168.0.171:9200/_aliases' -H'Content-Type: application/json' -d '
+HTTP_STATUS=$(curl   --user USERID:PASSWORD -XPOST "http://$ADDRESS/_aliases" -H'Content-Type: application/json' -d '
 {
 "actions": [
 { "remove": { "index": "'"$OLD_INDEX"'", "alias": "'"$ALIAS"'" }}
@@ -34,9 +34,9 @@ if grep -v "$GOOD_STATUS" <<< "$HTTP_STATUS"; then
    exit -1
 
 fi
- echo "***** remove alias job successed ! $HTTP_STATUS *****"
+ echo "*****remove alias job successed ! $HTTP_STATUS*****"
 
-HTTP_STATUS=$(curl   --user USERID:PASSWORD -XPOST 'http://192.168.0.171:9200/_aliases' -H'Content-Type: application/json' -d '
+HTTP_STATUS=$(curl   --user USERID:PASSWORD -XPOST "http://$ADDRESS/_aliases" -H'Content-Type: application/json' -d '
 {
 "actions": [
 { "add": { "index": "'"$NEW_INDEX"'", "alias": "'"$ALIAS"'" }}  
@@ -48,4 +48,4 @@ if grep -v "$GOOD_STATUS" <<< "$HTTP_STATUS"; then
    exit -1
 
 fi
-echo "***** swapping  successed : $HTTP_STATUS *****"
+echo "*****swapping  successed : $HTTP_STATUS*****"
