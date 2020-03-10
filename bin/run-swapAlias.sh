@@ -1,11 +1,13 @@
 ## run as :     run.sh 192.168.0.171:9200 my_ga_alias ga_day_index-0907 ga_index5
 #!/usr/bin/env bash
 ADDRESS=$1
-ALIAS=$2
-USERID=$3
-PASSWORD=$4
+USERID=$2
+PASSWORD=$3
+ALIAS=$4
 OLD_INDEX=$5
 NEW_INDEX=$6
+
+echo "***** swapping  $ALIAS from  $OLD_INDEX to $NEW_INDEX *****"
 
 if [ -z $ADDRESS ]; then
   ADDRESS="localhost:9200"
@@ -19,11 +21,31 @@ if [ $? != 0 ]; then
     exit -1
 fi
 
-curl --user USERID:PASSWORD -XPOST 'http://192.168.0.171:9200/_aliases' -H'Content-Type: application/json' -d '
+HTTP_STATUS=$(curl   --user USERID:PASSWORD -XPOST 'http://192.168.0.171:9200/_aliases' -H'Content-Type: application/json' -d '
 {
 "actions": [
-{ "remove": { "index": "'"$OLD_INDEX"'", "alias": "'"$ALIAS"'" }},
-{ "add": { "index": "'"$NEW_INDEX"'", "alias": "'"$ALIAS"'" }}
+{ "remove": { "index": "'"$OLD_INDEX"'", "alias": "'"$ALIAS"'" }}
 ]
 }
-'
+')  
+GOOD_STATUS='"acknowledged":true'
+if grep -v "$GOOD_STATUS" <<< "$HTTP_STATUS"; then
+   echo " remove alias job failed! $HTTP_STATUS"
+   exit -1
+
+fi
+ echo "***** remove alias job successed ! $HTTP_STATUS *****"
+
+HTTP_STATUS=$(curl   --user USERID:PASSWORD -XPOST 'http://192.168.0.171:9200/_aliases' -H'Content-Type: application/json' -d '
+{
+"actions": [
+{ "add": { "index": "'"$NEW_INDEX"'", "alias": "'"$ALIAS"'" }}  
+]
+}
+')
+if grep -v "$GOOD_STATUS" <<< "$HTTP_STATUS"; then
+   echo " add  alias job failed! $HTTP_STATUS"
+   exit -1
+
+fi
+echo "***** swapping  successed : $HTTP_STATUS *****"
