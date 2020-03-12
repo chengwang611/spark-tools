@@ -5,11 +5,11 @@ USERID=$2
 PASSWORD=$3
 ALIAS=$4
 echo "current alias is : $ALIAS"
+
 ## retrieve current alias
 i=1
 current_alias_index=""
-HTTP_STATUS=$(curl -s -XGET "http://$ADDRESS/_cat/aliases/$ALIAS")
-
+HTTP_STATUS=$(curl --user USERID:PASSWORD -s -XGET "http://$ADDRESS/_cat/aliases/$ALIAS")
 terms=$(echo $HTTP_STATUS | tr " " "\n")
 for term in $terms
 do
@@ -18,21 +18,19 @@ do
      current_alias_index=$term
  fi
  i=$((i+1))
-
 done
-
 echo "current index name for alias is:$current_alias_index"
 
 OLD_INDEX=$current_alias_index
-
+## estimate the target index name
 indexname=$5
 current_date=$(date '+%Y%m%d')
-current_index_name=$indexname$current_date
+current_index_name=$indexname-$current_date
 echo "alias will switch to new index: $current_index_name"
 
 #NEW_INDEX=$current_index_name
-NEW_INDEX=ga_day_index-0907-2
-echo "*****swapp  $ALIAS from  $OLD_INDEX to $NEW_INDEX*****"
+NEW_INDEX=ga_day_index-0908
+
 GOOD_STATUS='"acknowledged":true'
 if [ -z $ADDRESS ]; then
   ADDRESS="localhost:9200"
