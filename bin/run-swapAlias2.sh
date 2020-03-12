@@ -28,8 +28,7 @@ current_date=$(date '+%Y%m%d')
 current_index_name=$indexname-$current_date
 echo "alias will switch to new index: $current_index_name"
 
-#NEW_INDEX=$current_index_name
-NEW_INDEX=ga_day_index-0908
+NEW_INDEX=$current_index_name
 
 GOOD_STATUS='"acknowledged":true'
 if [ -z $ADDRESS ]; then
