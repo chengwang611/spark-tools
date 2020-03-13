@@ -21,7 +21,7 @@ import org.apache.spark.sql.functions.lit
 import org.apache.spark.sql.Column
 import scala.collection.JavaConversions._
 import com.rbcs.eia.tools.entities.ConfigProp
-
+import org.apache.hadoop.fs.{FileSystem, Path}
 object ElasticIndexTool {
   
   
@@ -66,21 +66,35 @@ object ElasticIndexTool {
     val conf = new SparkConf().setAppName(ElasticIndexTool.getClass.getName)
     if (!conf.contains("spark.master")) conf.setMaster("local[*]")
     val spark = SparkSession.builder().config(conf).getOrCreate()
-    import spark.sqlContext.implicits._
-
-    // Elastic connection parameters
-    val elasticConf: Map[String, String] = Map("es.nodes" -> config.esNodes,
-      "es.clustername" -> config.esClustername,"es.mapping.id" -> config.esMappingId,
-      "es.index.auto.create" -> config.esIndexAutoCreate)
-
-    val indexName = config.getIndexName
-    val mappingName = config.mappingName
-    // Dummy DataFrame
-    val df  = fileType(config.getDataPath) match {
-        case 1 => spark.read.format("com.databricks.spark.avro").load(config.getDataPath)
-        case 2 => spark.read.parquet(config.getDataPath)
-   }
     
+//    val fs = FileSystem.get(spark.sparkContext.hadoopConfiguration)
+//    val outPutPath = new Path("file:///c:\\tmp\\data2\\")
+//    for f in fs.get(conf).listStatus(path):
+//        print(f.getPath(), f.getLen())
+    
+    FileSystem.get( spark.sparkContext.hadoopConfiguration ).listStatus( new Path("file:///c:\\tmp\\data2\\")).foreach( x => {
+      println(x.getPath )
+      
+    
+    
+    })
+//    
+//    
+//    import spark.sqlContext.implicits._
+//
+//    // Elastic connection parameters
+//    val elasticConf: Map[String, String] = Map("es.nodes" -> config.esNodes,
+//      "es.clustername" -> config.esClustername,"es.mapping.id" -> config.esMappingId,
+//      "es.index.auto.create" -> config.esIndexAutoCreate)
+//
+//    val indexName = config.getIndexName
+//    val mappingName = config.mappingName
+//    // Dummy DataFrame
+//    val df  = fileType(config.getDataPath) match {
+//        case 1 => spark.read.format("com.databricks.spark.avro").load(config.getDataPath)
+//        case 2 => spark.read.parquet(config.getDataPath)
+//   }
+//    
 
 ////    //demo data type conversion-hard coded for test purpose
 //    val toDouble = udf[Double, String]( _.toDouble)
@@ -98,7 +112,7 @@ object ElasticIndexTool {
 
     // Write elasticsearch
 		if("true".equalsIgnoreCase(config.doIndex))
-      df.saveToEs(s"${indexName}/${mappingName}", elasticConf)
+     // df.saveToEs(s"${indexName}/${mappingName}", elasticConf)
 
     // terminate spark context
     spark.stop()
