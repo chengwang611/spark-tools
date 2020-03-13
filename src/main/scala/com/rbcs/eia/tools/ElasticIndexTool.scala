@@ -60,8 +60,8 @@ object ElasticIndexTool {
  }
  def main(args: Array[String]){
 
-    val config=loadConfig(args(0))
-    println(config.getDataPath)
+  //  val config=loadConfig(args(0))
+  //  println(config.getDataPath)
     // initialize spark context
     val conf = new SparkConf().setAppName(ElasticIndexTool.getClass.getName)
     if (!conf.contains("spark.master")) conf.setMaster("local[*]")
@@ -72,7 +72,7 @@ object ElasticIndexTool {
 //    for f in fs.get(conf).listStatus(path):
 //        print(f.getPath(), f.getLen())
     
-    FileSystem.get( spark.sparkContext.hadoopConfiguration ).listStatus( new Path("file:///c:\\tmp\\data2\\")).foreach( x => {
+    FileSystem.get( spark.sparkContext.hadoopConfiguration ).listStatus( new Path("/tmp/fxconduct/")).foreach( x => {
       println(x.getPath )
       
     
@@ -111,7 +111,7 @@ object ElasticIndexTool {
 //		df.show(false)
 
     // Write elasticsearch
-		if("true".equalsIgnoreCase(config.doIndex))
+	//	if("true".equalsIgnoreCase(config.doIndex))
      // df.saveToEs(s"${indexName}/${mappingName}", elasticConf)
 
     // terminate spark context
