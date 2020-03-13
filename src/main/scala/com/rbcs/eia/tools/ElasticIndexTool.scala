@@ -71,10 +71,10 @@ object ElasticIndexTool {
 //    val outPutPath = new Path("file:///c:\\tmp\\data2\\")
 //    for f in fs.get(conf).listStatus(path):
 //        print(f.getPath(), f.getLen())
-    
-    FileSystem.get( spark.sparkContext.hadoopConfiguration ).listStatus( new Path("/tmp/fxconduct/")).foreach( x => {
-      println(x.getPath )
-      
+    val fs=FileSystem.get( spark.sparkContext.hadoopConfiguration )
+    fs.listStatus( new Path("/tmp/fxconduct/")).foreach( x => {
+      println("deleting ................:"+x.getPath )
+      fs.delete(x.getPath, true)
     
     
     })
