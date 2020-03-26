@@ -20,8 +20,8 @@ package com.spark.tool
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.{ approx_count_distinct, expr, max, min, col, collect_list, lit, map, hash }
-import org.apache.spark.sql.functions.concat
+import org.apache.spark.sql.functions.{ approx_count_distinct, expr, max, min, col, collect_list, lit, map, hash,concat }
+import org.apache.spark.sql.functions.regexp_extract
 import org.apache.spark.sql.functions.to_json
 import java.net.URI
 import java.util.concurrent.{ ConcurrentHashMap, ConcurrentMap }
