@@ -20,7 +20,7 @@ package com.spark.tool
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.{ approx_count_distinct, expr, max, min, col, collect_list, lit, map,to_date }
+import org.apache.spark.sql.functions.{ approx_count_distinct, expr, max, min, col, collect_list, lit, map,to_date,trim }
 import org.apache.spark.sql.functions.concat
 import org.apache.spark.sql.functions.regexp_extract
 import org.apache.spark.sql.functions.to_json
@@ -126,7 +126,9 @@ object Aggregation {
       System.out.println("updated from :")
       updateOldDF.show(false)
 
-      val noChange_left_anti = newDFwithUid.join(addedOrUpdateUid, newDFwithUid.col("uid") === addedOrUpdateUid.col("uid"), "left_anti").withColumn("extracted", to_date(regexp_extract(col("InvoiceDate"),"[0-9]{2}/[0-9]{1}/[0-9]{4}",0),"MM/dd/yyyy"))
+      val noChange_left_anti = newDFwithUid.join(addedOrUpdateUid, newDFwithUid.col("uid") === addedOrUpdateUid.col("uid"), "left_anti")
+      .withColumn("extracted_date", to_date(regexp_extract(col("InvoiceDate"),"[0-9]{2}/[0-9]{1}/[0-9]{4}",0),"MM/dd/yyyy"))
+      .withColumn("extracted_name", regexp_extract(col("Description"),"(BOXES)",0)).filter(trim(col("extracted_name"))==="BOXES")
       System.out.println("left_anti -no change :")
       noChange_left_anti.show(false)
       System.out.println("old  =" + oldDF.count)
