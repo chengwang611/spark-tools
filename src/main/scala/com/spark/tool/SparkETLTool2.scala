@@ -87,6 +87,7 @@ object Aggregation2 {
     spark.stop()
 
     System.out.println("this is new line2")
+     System.out.println("this is new line3 from master")
 
   }
 }
