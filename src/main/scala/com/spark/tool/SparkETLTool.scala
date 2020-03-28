@@ -145,11 +145,8 @@ object Aggregation {
     System.out.println("Total executing time is :"+(t1-t0)/1000)
    
     spark.stop()
-//    System.out.println("this is new line2")
-
-//    System.out.println("this is new line3 from master")
-//     System.out.println("this is new line3 from master changed")
-
+    System.out.println("this is new line2")
+    System.out.println("this is new line3 from master")
   }
 }
 // scalastyle:on println

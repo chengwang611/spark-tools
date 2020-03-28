@@ -96,7 +96,7 @@ object AggregationDF {
     val df2 = spark.sql("select visitId,trafficSource , geoNetwork  from tempTable ")
     val df3 = df2.withColumn("hash", hash(df2.columns.map(col): _*))
     df3.show(false)
-    // System.out.println(df.count)
+     System.out.println(df.count)
 
     spark.stop()
   }
