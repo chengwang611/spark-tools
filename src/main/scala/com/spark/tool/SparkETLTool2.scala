@@ -104,9 +104,8 @@ object Aggregation2 {
      System.out.println("this is new line3 from master")
 
   }
-}
-
- def readfile2(path: String, spark: SparkSession): DataFrame = {
+  
+   def readfile2(path: String, spark: SparkSession): DataFrame = {
     if (path.endsWith("csv")) {
       return spark.read.format("csv").option("header", "true").option("inferSchema", "true").load(path)
 
@@ -118,6 +117,9 @@ object Aggregation2 {
     return null
 
   }
+}
+
+
 
 
 // scalastyle:on println
