@@ -149,6 +149,7 @@ object Aggregation {
     System.out.println("this is new line3 from master")
         System.out.println("this is new line8 from dev")
         System.out.println("this is new line9 from uat")
+         System.out.println("this is new line9 from uat2")
   }
 }
 // scalastyle:on println
