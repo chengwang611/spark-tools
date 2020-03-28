@@ -43,6 +43,20 @@ object Aggregation2 {
     return null
 
   }
+  
+   def readfile3(path: String, spark: SparkSession): DataFrame = {
+    if (path.endsWith("csv")) {
+      return spark.read.format("csv").option("header", "true").option("inferSchema", "true").load(path)
+
+    }
+    if (path.endsWith("parquet")) {
+      return spark.read.parquet(path)
+
+    }
+    return null
+
+  }
+
 
   def main(args: Array[String]) {
     val vars = new ConcurrentHashMap[String, String]
