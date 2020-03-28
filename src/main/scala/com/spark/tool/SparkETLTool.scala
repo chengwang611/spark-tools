@@ -146,7 +146,10 @@ object Aggregation {
    
     spark.stop()
     System.out.println("this is new line2")
-    System.out.println("this is new line3 from dev")
+
+    System.out.println("this is new line3 from master")
+     System.out.println("this is new line3 from master changed")
+
   }
 }
 // scalastyle:on println
