@@ -146,6 +146,7 @@ object Aggregation {
    
     spark.stop()
     System.out.println("this is new line2")
+    System.out.println("this is new line3 from master")
   }
 }
 // scalastyle:on println
