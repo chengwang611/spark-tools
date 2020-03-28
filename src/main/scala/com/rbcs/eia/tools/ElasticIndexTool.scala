@@ -23,6 +23,8 @@ import scala.collection.JavaConversions._
 import com.rbcs.eia.tools.entities.ConfigProp
 import org.apache.hadoop.fs.{FileSystem, Path}
 object ElasticIndexTool {
+
+  //20231122
   
   
  def loadConfig(path:String): ConfigProp= {
