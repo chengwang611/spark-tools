@@ -88,6 +88,7 @@ object Aggregation2 {
 
     System.out.println("this is new line")
     System.out.println("this is new line from dev")
+     System.out.println("this is new line 3 from dev 2")
 
   }
 }
