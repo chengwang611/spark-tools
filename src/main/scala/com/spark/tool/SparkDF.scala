@@ -77,17 +77,7 @@ object AggregationDF {
     }
 
   }
-  
-    }
-  def mergDF2(x: Option[DataFrame], y: Option[DataFrame]): Option[DataFrame] = {
-    (x, y) match {
-      case (Some(x), Some(y)) => Some(x.union(y))
-      case (Some(x), None)    => Some(x)
-      case (None, Some(y))    => Some(y)
-      case (None, None)       => None
-    }
 
-  }
   def main(args: Array[String]) {
 
     //    val a1=Array("1","2","3","7").toSet
