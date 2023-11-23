@@ -24,7 +24,7 @@ import com.rbcs.eia.tools.entities.ConfigProp
 import org.apache.hadoop.fs.{FileSystem, Path}
 object ElasticIndexTool {
 
-  //20231122
+  //20231122-2222
   
   
  def loadConfig(path:String): ConfigProp= {
