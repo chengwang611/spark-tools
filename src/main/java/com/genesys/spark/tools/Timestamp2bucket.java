@@ -5,6 +5,10 @@ import org.apache.spark.sql.api.java.UDF1;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * this is the UDF implemenation for timestamp to the buicket string the generated bucket is following yyyyMMddhh format
+ * to be sure it is unique. if the input timestamp is null , the bucket will be null.
+ */
 public class Timestamp2bucket implements UDF1<Timestamp, String> {
     @Override
     public String call(Timestamp ts) throws Exception {
