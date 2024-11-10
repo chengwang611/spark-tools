@@ -39,14 +39,16 @@ public class BatchAggregator {
 
     public static void main(String[] args)
             throws  IOException {
-
-        String path="/Users/chengwang/IdeaProjects/spark-tools/data/input/genesys/*.csv";
-        String outputpath= String.format("/Users/chengwang/IdeaProjects/spark-tools/data/output/genesys/batch-agg-%d.csv",System.currentTimeMillis() );
+        String path="";
+        String outputpath= "";
         for(String arg:args)
             System.out.println("****** "+arg);
         if(args.length >=2){
             path=args[0];
             outputpath=args[1];
+        }else{
+            System.out.println("usage: java -cp  $JAR_PATH com.genesys.spark.tools.BatchAggregator $PATH_TO_INPUT  $PATH_TO_OUTPUT");
+            System.exit(-1);
         }
         SparkSession spark = SparkSession.builder().appName("BatchAggregator").master("local[*]").getOrCreate();
         spark.sqlContext().udf().register("timestamp2bucket", new Timestamp2bucket(), DataTypes.StringType);
